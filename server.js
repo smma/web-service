@@ -12,12 +12,12 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Serve static files (HTML, CSS, JS)
-app.use(express.static('public'));
-
-// Routes
+// Routes (must be before static files to avoid conflicts)
 const routes = require('./routes');
 app.use('/', routes);
+
+// Serve static files (HTML, CSS, JS) - after routes to avoid conflicts
+app.use(express.static('public'));
 
 // 404 handler
 app.use((req, res) => {

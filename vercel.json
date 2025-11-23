@@ -8,6 +8,26 @@
   ],
   "routes": [
     {
+      "src": "/json-params-atividade",
+      "dest": "server.js"
+    },
+    {
+      "src": "/lista-analytics-atividade",
+      "dest": "server.js"
+    },
+    {
+      "src": "/analytics-atividade",
+      "dest": "server.js"
+    },
+    {
+      "src": "/user_url",
+      "dest": "server.js"
+    },
+    {
+      "src": "/activity-config",
+      "dest": "server.js"
+    },
+    {
       "src": "/(.*)",
       "dest": "server.js"
     }

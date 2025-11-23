@@ -6,8 +6,6 @@
 
 ## Deploy to Vercel
 
-### Method 1: Via Vercel Dashboard (Recommended)
-
 1. **Push to GitHub:**
    ```bash
    git init
@@ -36,34 +34,6 @@
      - Go to **Deployments** tab
      - Click the three dots (⋯) on the latest deployment
      - Click **Redeploy**
-
-### Method 2: Via Vercel CLI
-
-1. **Install Vercel CLI:**
-   ```bash
-   npm install -g vercel
-   ```
-
-2. **Login to Vercel:**
-   ```bash
-   vercel login
-   ```
-
-3. **Deploy:**
-   ```bash
-   vercel
-   ```
-
-4. **Set Environment Variable:**
-   ```bash
-   vercel env add DOMAIN
-   ```
-   When prompted, enter your domain (e.g., `your-project-name.vercel.app`)
-
-5. **Deploy to Production:**
-   ```bash
-   vercel --prod
-   ```
 
 ## Setting the Domain Variable
 
