@@ -27,7 +27,10 @@ exports.generateUserUrl = (req, res) => {
 
     // Construct URL with activityID and Inven!RAstdID
     // Using query parameters format
-    const baseUrl = req.protocol + '://' + req.get('host');
+    const domain = process.env.DOMAIN || req.get('host') || 'localhost:3000';
+    // Use https if X-Forwarded-Proto header is set (common in deployment platforms) or if domain doesn't contain localhost
+    const protocol = req.get('x-forwarded-proto') || (domain.includes('localhost') ? 'http' : 'https') || req.protocol || 'http';
+    const baseUrl = `${protocol}://${domain}`;
     const url = `${baseUrl}/user?activityID=${encodeURIComponent(activityID)}&Inven!RAstdID=${encodeURIComponent(invenRAstdID)}`;
 
     res.status(200).json({

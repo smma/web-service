@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Activity</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 28px;
+        }
+
+        .info-section {
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+
+        .info-item {
+            margin-bottom: 15px;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .info-value {
+            color: #333;
+            font-size: 16px;
+            word-break: break-all;
+        }
+
+        .error {
+            color: #dc3545;
+            text-align: center;
+            padding: 20px;
+            background: #f8d7da;
+            border-radius: 8px;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>User Activity Information</h1>
+        <div id="content">
+            <!-- Content will be populated by JavaScript -->
+        </div>
+    </div>
+
+    <script>
+        // Get query parameters from URL
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                activityID: params.get('activityID'),
+                invenRAstdID: params.get('Inven!RAstdID')
+            };
+        }
+
+        // Display the information
+        function displayInfo() {
+            const queryParams = getQueryParams();
+            const contentDiv = document.getElementById('content');
+
+            if (!queryParams.activityID || !queryParams.invenRAstdID) {
+                contentDiv.innerHTML = `
+                    <div class="error">
+                        <strong>Missing Parameters</strong><br>
+                        This page requires both activityID and Inven!RAstdID query parameters.
+                    </div>
+                `;
+                return;
+            }
+
+            contentDiv.innerHTML = `
+                <div class="info-section">
+                    <div class="info-item">
+                        <div class="info-label">Activity ID</div>
+                        <div class="info-value">${escapeHtml(queryParams.activityID)}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Inven!RAstdID</div>
+                        <div class="info-value">${escapeHtml(queryParams.invenRAstdID)}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Escape HTML to prevent XSS
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        // Display info when page loads
+        displayInfo();
+    </script>
+</body>
+</html>
+
