@@ -49,7 +49,7 @@ If `DOMAIN` is not set, the server automatically uses the request host from inco
 
 After deployment, your endpoints will be:
 
-- `GET /activity-config` - Returns activity config with dynamic domain
+- `GET /` - Returns activity config with dynamic domain (root endpoint)
 - `GET /json-params-atividade` - Get JSON params
 - `GET /lista-analytics-atividade` - Get analytics list
 - `POST /analytics-atividade` - Get analytics by activityID
@@ -80,7 +80,7 @@ After deployment, your endpoints will be:
 
 5. **Test activity config:**
    ```bash
-   curl http://localhost:3000/activity-config
+   curl http://localhost:3000/
    ```
 
 ## Getting Your Activity Config
@@ -88,7 +88,7 @@ After deployment, your endpoints will be:
 After deployment, get your activity configuration with the correct domain:
 
 ```bash
-curl https://your-domain.com/activity-config
+curl https://your-domain.com/
 ```
 
 This will return the JSON with all URLs using your actual domain instead of `<domínio>`.

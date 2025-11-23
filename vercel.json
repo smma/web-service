@@ -24,7 +24,7 @@
       "dest": "server.js"
     },
     {
-      "src": "/activity-config",
+      "src": "/$",
       "dest": "server.js"
     },
     {
