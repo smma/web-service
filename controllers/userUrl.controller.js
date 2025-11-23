@@ -38,12 +38,8 @@ exports.generateUserUrl = (req, res) => {
     params.append('Inven!RAstdID', invenRAstdID);
     const url = `${baseUrl}/user?${params.toString()}`;
 
-    res.status(200).json({
-      success: true,
-      url: url,
-      activityID: activityID,
-      'Inven!RAstdID': invenRAstdID
-    });
+    // Return only the URL as a string
+    res.status(200).send(url);
   } catch (error) {
     res.status(500).json({
       success: false,
