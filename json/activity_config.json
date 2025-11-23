@@ -1,0 +1,9 @@
+{
+  "name": "Atividade Mentor Mentee",
+  "config_url": "http://<domínio>/configuracao-atividade.html",
+  "json_params_url": "http://<domínio>/json-params-atividade",
+  "user_url": "http://<domínio>/deploy-atividade",
+  "analytics_url": "http://<domínio>/analytics-atividade",
+  "analytics_list_url": "http://<domínio>/lista-analytics-atividade"
+}
+

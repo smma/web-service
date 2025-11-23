@@ -1,0 +1,30 @@
+{
+  "qualAnalytics": [
+    {
+      "name": "mentorFeedback",
+      "type": "text/plain"
+    },
+    {
+      "name": "menteeFeedback",
+      "type": "text/plain"
+    }
+  ],
+  "quantAnalytics": [
+    {
+      "name": "totalSessions",
+      "type": "integer"
+    },
+    {
+      "name": "totalAttendance",
+      "type": "integer"
+    },
+    {
+      "name": "totalGoals",
+      "type": "integer"
+    },
+    {
+      "name": "totalGoalsAchieved",
+      "type": "integer"
+    }
+  ]
+}

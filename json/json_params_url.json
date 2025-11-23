@@ -1,0 +1,22 @@
+[
+  {
+    "name": "sessionFrequency",
+    "type": "text/plain"
+  },
+  {
+    "name": "sessionDuration",
+    "type": "text/plain"
+  },
+  {
+    "name": "sessionStartTime",
+    "type": "text/plain"
+  },
+  {
+    "name": "sessionEndTime",
+    "type": "text/plain"
+  },
+  {
+    "name": "goals",
+    "type": "text/plain"
+  }
+]
