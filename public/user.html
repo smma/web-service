@@ -83,9 +83,23 @@
         // Get query parameters from URL
         function getQueryParams() {
             const params = new URLSearchParams(window.location.search);
+            // URLSearchParams automatically decodes both parameter names and values
+            // Try the decoded parameter name first
+            let invenRAstdID = params.get('Inven!RAstdID');
+            
+            // If not found with decoded name, try encoded name
+            if (!invenRAstdID) {
+                invenRAstdID = params.get('Inven%21RAstdID');
+            }
+            
+            // Clean up the value - remove any trailing % or whitespace
+            if (invenRAstdID) {
+                invenRAstdID = invenRAstdID.trim().replace(/%$/, '');
+            }
+            
             return {
                 activityID: params.get('activityID'),
-                invenRAstdID: params.get('Inven!RAstdID')
+                invenRAstdID: invenRAstdID
             };
         }
 
