@@ -1,5 +1,6 @@
 const fs = require('fs');
 const path = require('path');
+const ResponseFactory = require('../factories/ResponseFactory');
 
 // Get activity config with dynamic domain
 exports.getActivityConfig = (req, res) => {
@@ -22,12 +23,9 @@ exports.getActivityConfig = (req, res) => {
       analytics_list_url: jsonData.analytics_list_url.replace('<domínio>', domain).replace('http://', `${protocol}://`)
     };
     
-    res.status(200).json(config);
+    return ResponseFactory.success(res, config);
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    return ResponseFactory.serverError(res, error);
   }
 };
 

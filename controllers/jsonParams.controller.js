@@ -1,4 +1,5 @@
 const db = require('../models/database');
+const ResponseFactory = require('../factories/ResponseFactory');
 
 // Get JSON params from database (defaults to activityID 12345)
 exports.getJsonParams = (req, res) => {
@@ -8,18 +9,12 @@ exports.getJsonParams = (req, res) => {
     const jsonParams = db.getJsonParams(activityID);
     
     if (!jsonParams) {
-      return res.status(404).json({
-        success: false,
-        error: 'Activity not found'
-      });
+      return ResponseFactory.notFound(res, 'Activity');
     }
     
-    res.status(200).json(jsonParams);
+    return ResponseFactory.success(res, jsonParams);
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    return ResponseFactory.serverError(res, error);
   }
 };
 
@@ -27,12 +22,9 @@ exports.getJsonParams = (req, res) => {
 exports.getAnalyticsList = (req, res) => {
   try {
     const analyticsList = db.getAnalyticsList();
-    res.status(200).json(analyticsList);
+    return ResponseFactory.success(res, analyticsList);
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    return ResponseFactory.serverError(res, error);
   }
 };
 
@@ -42,27 +34,18 @@ exports.getAnalytics = (req, res) => {
     const { activityID } = req.body;
 
     if (!activityID) {
-      return res.status(400).json({
-        success: false,
-        error: 'activityID is required'
-      });
+      return ResponseFactory.badRequest(res, 'activityID is required');
     }
 
     const analytics = db.getAnalytics(activityID);
     
     if (!analytics) {
-      return res.status(404).json({
-        success: false,
-        error: 'Analytics not found for this activityID'
-      });
+      return ResponseFactory.notFound(res, 'Analytics not found for this activityID');
     }
     
-    res.status(200).json(analytics);
+    return ResponseFactory.success(res, analytics);
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    return ResponseFactory.serverError(res, error);
   }
 };
 

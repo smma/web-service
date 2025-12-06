@@ -1,3 +1,5 @@
+const ResponseFactory = require('../factories/ResponseFactory');
+
 // Display user page with parameters
 exports.displayUserPage = (req, res) => {
   try {
@@ -78,12 +80,9 @@ exports.displayUserPage = (req, res) => {
 </body>
 </html>`;
 
-    res.status(200).send(html);
+    return ResponseFactory.text(res, html);
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    return ResponseFactory.serverError(res, error);
   }
 };
 

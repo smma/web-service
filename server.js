@@ -3,6 +3,8 @@ const cors = require('cors');
 const morgan = require('morgan');
 require('dotenv').config();
 
+const ResponseFactory = require('./factories/ResponseFactory');
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
@@ -21,15 +23,13 @@ app.use(express.static('public'));
 
 // 404 handler
 app.use((req, res) => {
-  res.status(404).json({ error: 'Route not found' });
+  ResponseFactory.notFound(res, 'Route');
 });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(err.status || 500).json({
-    error: err.message || 'Internal Server Error'
-  });
+  ResponseFactory.serverError(res, err);
 });
 
 // Start server

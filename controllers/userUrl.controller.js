@@ -1,3 +1,5 @@
+const ResponseFactory = require('../factories/ResponseFactory');
+
 // Generate user URL with activityID and Inven!RAstdID
 exports.generateUserUrl = (req, res) => {
   try {
@@ -5,24 +7,15 @@ exports.generateUserUrl = (req, res) => {
 
     // Validate required fields
     if (!activityID) {
-      return res.status(400).json({
-        success: false,
-        error: 'activityID is required'
-      });
+      return ResponseFactory.badRequest(res, 'activityID is required');
     }
 
     if (!invenRAstdID) {
-      return res.status(400).json({
-        success: false,
-        error: 'Inven!RAstdID is required'
-      });
+      return ResponseFactory.badRequest(res, 'Inven!RAstdID is required');
     }
 
     if (!json_params || !Array.isArray(json_params)) {
-      return res.status(400).json({
-        success: false,
-        error: 'json_params is required and must be an array'
-      });
+      return ResponseFactory.badRequest(res, 'json_params is required and must be an array');
     }
 
     // Construct URL with activityID and Inven!RAstdID
@@ -39,12 +32,9 @@ exports.generateUserUrl = (req, res) => {
     const url = `${baseUrl}/user?${params.toString()}`;
 
     // Return only the URL as a string
-    res.status(200).send(url);
+    return ResponseFactory.text(res, url);
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    return ResponseFactory.serverError(res, error);
   }
 };
 
