@@ -1,4 +1,7 @@
 // Mock database with sample data
+// Enhanced with Decorator Pattern (Structural Pattern)
+
+const { LoggingDecorator } = require('../decorators');
 
 // Activities data
 const activities = {
@@ -143,5 +146,9 @@ const db = {
   }
 };
 
-module.exports = db;
+// Export decorated database with logging enabled
+// The Decorator Pattern adds logging without modifying the core db object
+const decoratedDb = new LoggingDecorator(db);
+
+module.exports = decoratedDb;
 
