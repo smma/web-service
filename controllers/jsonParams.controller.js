@@ -1,10 +1,10 @@
 const db = require('../models/database');
 const ResponseFactory = require('../factories/ResponseFactory');
+const { ValidationHandler, RequiredFieldsHandler, ResourceExistsHandler } = require('../handlers');
 
-// Get JSON params from database (defaults to activityID 12345)
+// Get JSON params from database
 exports.getJsonParams = (req, res) => {
   try {
-    // Use default activityID 12345 or get from query params if provided
     const activityID = req.query.activityID || '12345';
     const jsonParams = db.getJsonParams(activityID);
     
@@ -21,31 +21,34 @@ exports.getJsonParams = (req, res) => {
 // Get analytics list from database
 exports.getAnalyticsList = (req, res) => {
   try {
-    const analyticsList = db.getAnalyticsList();
-    return ResponseFactory.success(res, analyticsList);
+    return ResponseFactory.success(res, db.getAnalyticsList());
   } catch (error) {
     return ResponseFactory.serverError(res, error);
   }
 };
+
+/**
+ * Chain of Responsibility Pattern for analytics validation
+ * Request → [RequiredFieldsHandler] → [ResourceExistsHandler] → Success
+ *                    ↓                         ↓
+ *              (error 400)              (error 404)
+ */
+const analyticsChain = ValidationHandler.buildChain([
+  new RequiredFieldsHandler(['activityID'], 'body'),
+  new ResourceExistsHandler('activityID', (id) => db.getAnalytics(id), 'Analytics', 'body')
+]);
 
 // Get analytics data by activityID
 exports.getAnalytics = (req, res) => {
   try {
-    const { activityID } = req.body;
-
-    if (!activityID) {
-      return ResponseFactory.badRequest(res, 'activityID is required');
+    const result = analyticsChain.handle(req);
+    if (!result.success) {
+      return ResponseFactory.error(res, result.error, result.statusCode);
     }
 
-    const analytics = db.getAnalytics(activityID);
-    
-    if (!analytics) {
-      return ResponseFactory.notFound(res, 'Analytics not found for this activityID');
-    }
-    
-    return ResponseFactory.success(res, analytics);
+    // Resource already found by chain, stored in req.validatedResource
+    return ResponseFactory.success(res, req.validatedResource);
   } catch (error) {
     return ResponseFactory.serverError(res, error);
   }
 };
-

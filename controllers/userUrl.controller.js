@@ -1,40 +1,35 @@
 const ResponseFactory = require('../factories/ResponseFactory');
+const { ValidationHandler, RequiredFieldsHandler } = require('../handlers');
+
+/**
+ * Chain of Responsibility Pattern for request validation
+ * Request → [RequiredFieldsHandler] → Success or Error
+ */
+const validationChain = ValidationHandler.buildChain([
+  new RequiredFieldsHandler(['activityID', 'Inven!RAstdID', 'json_params'], 'body')
+]);
 
 // Generate user URL with activityID and Inven!RAstdID
 exports.generateUserUrl = (req, res) => {
   try {
-    const { activityID, 'Inven!RAstdID': invenRAstdID, json_params } = req.body;
-
-    // Validate required fields
-    if (!activityID) {
-      return ResponseFactory.badRequest(res, 'activityID is required');
+    // Use Chain of Responsibility for validation
+    const result = validationChain.handle(req);
+    if (!result.success) {
+      return ResponseFactory.error(res, result.error, result.statusCode);
     }
 
-    if (!invenRAstdID) {
-      return ResponseFactory.badRequest(res, 'Inven!RAstdID is required');
-    }
+    const { activityID, 'Inven!RAstdID': invenRAstdID } = req.body;
 
-    if (!json_params || !Array.isArray(json_params)) {
-      return ResponseFactory.badRequest(res, 'json_params is required and must be an array');
-    }
-
-    // Construct URL with activityID and Inven!RAstdID
-    // Using query parameters format with proper encoding
+    // Construct URL
     const domain = process.env.DOMAIN || req.get('host') || 'localhost:3000';
-    // Use https if X-Forwarded-Proto header is set (common in deployment platforms) or if domain doesn't contain localhost
-    const protocol = req.get('x-forwarded-proto') || (domain.includes('localhost') ? 'http' : 'https') || req.protocol || 'http';
-    const baseUrl = `${protocol}://${domain}`;
+    const protocol = req.get('x-forwarded-proto') || (domain.includes('localhost') ? 'http' : 'https');
     
-    // Use URLSearchParams to properly encode both parameter names and values
     const params = new URLSearchParams();
     params.append('activityID', activityID);
     params.append('Inven!RAstdID', invenRAstdID);
-    const url = `${baseUrl}/user?${params.toString()}`;
 
-    // Return only the URL as a string
-    return ResponseFactory.text(res, url);
+    return ResponseFactory.text(res, `${protocol}://${domain}/user?${params.toString()}`);
   } catch (error) {
     return ResponseFactory.serverError(res, error);
   }
 };
-
